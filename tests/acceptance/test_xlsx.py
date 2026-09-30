@@ -1,4 +1,4 @@
-"""Contrato proposto para issue #2. Execute separadamente; XLSX ainda não implementado."""
+"""Testes de aceite da importação XLSX — issue #2."""
 import csv
 import json
 import subprocess
@@ -181,6 +181,58 @@ class XlsxAcceptanceTests(unittest.TestCase):
 
     def test_header_only_workbook_is_empty(self):
         self.assertEqual(load(self.workbook([])), [])
+
+    def test_formatted_empty_columns_do_not_change_schema(self):
+        from openpyxl import load_workbook
+        path = self.workbook([self.valid_row()])
+        wb = load_workbook(path)
+        wb.active['J1'].number_format = '0.00'
+        wb.active['J2'].number_format = '0.00'
+        wb.save(path)
+        wb.close()
+        self.assertEqual(len(load(path)), 1)
+
+    def test_workbook_closed_when_validation_fails(self):
+        from openpyxl import load_workbook
+        from unittest.mock import patch
+        row = self.valid_row()
+        row[4] = -1
+        path = self.workbook([row])
+        wb = load_workbook(path, read_only=True)
+        with patch('openpyxl.load_workbook', return_value=wb), patch.object(wb, 'close', wraps=wb.close) as close:
+            with self.assertRaisesRegex(ValueError, 'Linha 2:'):
+                load(path)
+            close.assert_called_once()
+
+    def test_cli_csv_without_dependency_and_xlsx_install_hint(self):
+        for path, expected in [(ROOT/'examples/producao.csv', 0),
+                               (self.workbook([self.valid_row()]), 2)]:
+            with self.subTest(path=path):
+                result = subprocess.run([sys.executable, '-S', str(ROOT/'src/report.py'),
+                                         str(path), '--output', str(self.folder/'no-site')],
+                                        capture_output=True, text=True)
+                self.assertEqual(result.returncode, expected, result.stderr)
+                if expected:
+                    self.assertIn('pip install -r requirements-xlsx.txt', result.stderr)
+                    self.assertNotIn('Traceback', result.stderr)
+
+    def test_cli_malformed_xml_has_clean_error(self):
+        from zipfile import ZipFile
+        original = self.workbook([self.valid_row()])
+        corrupt = self.folder/'bad-xml.xlsx'
+        with ZipFile(original) as source, ZipFile(corrupt, 'w') as target:
+            for name in source.namelist():
+                content = b'<worksheet>' if name == 'xl/worksheets/sheet1.xml' else source.read(name)
+                target.writestr(name, content)
+        result = subprocess.run([sys.executable, str(ROOT/'src/report.py'), str(corrupt)],
+                                capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2)
+        self.assertIn('Arquivo XLSX inválido', result.stderr)
+        self.assertNotIn('Traceback', result.stderr)
+
+    def test_unsupported_extension_rejected(self):
+        with self.assertRaisesRegex(ValueError, 'Formato não suportado'):
+            load(self.folder/'input.xls')
 
     def test_cli_matches_csv_with_period_and_exports(self):
         raw = [self.valid_row(), ['2026-09-22', 'Ração', 'Produto', 2, '0.2']]
