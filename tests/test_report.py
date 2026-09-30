@@ -6,6 +6,33 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'src'))
 from report import load, summarize, export
 
 class ReportTests(unittest.TestCase):
+    def test_csv_header_and_required_cells(self):
+        header = 'data;categoria;produto;batidas;kg'
+        invalid = [header.replace('kg', 'peso'), header+';extra',
+                   'categoria;data;produto;batidas;kg']
+        for value in invalid:
+            with self.subTest(header=value), tempfile.TemporaryDirectory() as td:
+                path = Path(td)/'input.csv'
+                path.write_text(value+'\n', encoding='utf-8')
+                with self.assertRaisesRegex(ValueError, 'Cabeçalho'): load(path)
+        row = ['2026-09-21', 'Ração', 'X', '1', '0.1']
+        for index in range(5):
+            for value in ['', '   ']:
+                with self.subTest(index=index, value=value), tempfile.TemporaryDirectory() as td:
+                    values = row.copy(); values[index] = value
+                    path = Path(td)/'input.csv'
+                    path.write_text(header+'\n'+';'.join(values)+'\n', encoding='utf-8')
+                    with self.assertRaisesRegex(ValueError, 'Linha 2:'): load(path)
+
+    def test_csv_invalid_date_and_column_counts_with_physical_line(self):
+        rows = ['2026-02-30;Ração;X;1;1', '2026-09-21;Ração;X;1',
+                '2026-09-21;Ração;X;1;1;extra', '2026-09-21;Ração;X;1;-1']
+        for row in rows:
+            with self.subTest(row=row), tempfile.TemporaryDirectory() as td:
+                path = Path(td)/'input.csv'
+                path.write_text('data;categoria;produto;batidas;kg\n\n'+row+'\n', encoding='utf-8')
+                with self.assertRaisesRegex(ValueError, 'Linha 3:'): load(path)
+
     def test_totals_and_filter(self):
         rows=load(Path(__file__).resolve().parents[1]/'examples/producao.csv')
         g=summarize(rows)

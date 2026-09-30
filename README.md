@@ -1,25 +1,40 @@
 # Relatórios de produção em Python
 
-Automatiza a consolidação de planilhas exportadas pelo Excel como CSV, com validações, filtros de período e totais por produto. Projeto demonstrativo com dados fictícios e apoio de IA.
+Consolida arquivos CSV ou XLSX com validações, filtros de período e totais por produto. Projeto demonstrativo com dados fictícios e apoio de IA.
 
-## Executar
+## Instalação e execução
 
-Python 3.11+, sem pacotes externos. Execute nesta pasta:
+Python 3.11+. CSV funciona com a biblioteca padrão. Para ler XLSX ou executar a suíte completa:
 
 ```bash
-python src/report.py examples/producao.csv --start 2026-09-21 --end 2026-09-25 --output output
+python -m pip install -r requirements-xlsx.txt
+python src/report.py examples/producao.csv --start 2026-09-21 --end 2026-09-25 --output output/csv
+python src/report.py examples/producao.xlsx --start 2026-09-21 --end 2026-09-25 --output output/xlsx
 python -m unittest discover -s tests -v
 ```
 
-Abra `output/relatorio.html` ou [o exemplo gerado](examples/relatorio.html). O navegador permite imprimir/salvar como PDF. `totais.json` fornece a saída estruturada.
+Abra `output/xlsx/relatorio.html` ou [o exemplo gerado](examples/relatorio.html). O navegador permite imprimir/salvar como PDF. `totais.json` fornece a saída estruturada, com kg como string decimal.
+
+Para testar apenas CSV sem instalar pacotes: `python -m unittest discover -s tests -p test_report.py -v`.
+Para regenerar a planilha fictícia: `python examples/gerar_xlsx.py`.
 
 ## Entrada e regras
 
-CSV UTF-8 com separador `;` e cabeçalho `data;categoria;produto;batidas;kg`. Excel: exporte mantendo esse cabeçalho e separador. Datas ISO `AAAA-MM-DD`; decimal com ponto ou vírgula, sem separador de milhares.
+Cabeçalho obrigatório, em ordem exata: `data`, `categoria`, `produto`, `batidas`, `kg`.
 
-Medicamentos, Premix e Mineral usam batidas inteiras e kg=0. Recebimentos usam kg e batidas=0. Ração mostra batidas, kg e total em toneladas. Peso é informado, não inferido por batida. Valores negativos, NaN, colunas incorretas, produtos vazios e datas inválidas são rejeitados. Duplicatas são somadas: o formato não possui identificador de lançamento.
+- CSV: UTF-8 (BOM aceito), separador `;`, datas ISO `AAAA-MM-DD`.
+- XLSX: primeira aba na ordem do arquivo, independentemente da aba ativa; cabeçalho na primeira linha. Datas ISO textuais ou células Excel de data sem horário. Horários não zero e números sem formato de data são rejeitados.
+- Números: ponto ou vírgula decimal, sem separador de milhares no texto. XLSX também aceita células numéricas. Booleanos, fórmulas e erros Excel são rejeitados.
+- Células obrigatórias vazias são inválidas, inclusive kg/batidas: informe zero explicitamente. Linhas XLSX completamente vazias são ignoradas; colunas finais apenas formatadas são ignoradas. Colunas extras com conteúdo são rejeitadas.
+- Erros de linha indicam o número físico no arquivo. Cabeçalhos não são corrigidos automaticamente.
+
+Medicamentos, Premix e Mineral usam batidas inteiras e kg=0. Recebimentos usam kg e batidas=0. Ração mostra batidas, kg e total em toneladas. Peso é informado, não inferido por batida. Valores negativos, NaN/infinito, colunas incorretas, produtos vazios e datas inválidas são rejeitados. Duplicatas são somadas: o formato não possui identificador de lançamento.
+
+Toda a entrada é validada antes dos filtros. Em caso de erro, a CLI retorna código 2 e não gera novas saídas; arquivos existentes no destino permanecem como estavam.
 
 ## Resultado esperado do exemplo
+
+CSV e XLSX contêm os mesmos nove lançamentos e produzem HTML/JSON idênticos:
 
 - Ração: 145.000 kg / 145 t / 58 batidas.
 - Medicamentos: 100 batidas; Premix: 100; Mineral: 18.
@@ -27,9 +42,11 @@ Medicamentos, Premix e Mineral usam batidas inteiras e kg=0. Recebimentos usam k
 
 ## Decisões e limites
 
-`Decimal` mantém precisão nos pesos. HTML escapa conteúdo do CSV. Biblioteca padrão simplifica a instalação. Não lê XLSX nem gera PDF diretamente; não registra indicadores reais de ganho de tempo.
+`Decimal` mantém os pesos na leitura, consolidação e exportação. Células numéricas Excel são convertidas usando `Decimal(str(value))`; isso não recupera dígitos já perdidos na planilha. Para alta precisão, grave kg como texto. O exemplo XLSX usa pesos textuais; os testes também cobrem células numéricas.
 
-Próximo passo: importar XLSX e adicionar identificadores para detectar duplicatas.
+HTML escapa título e produtos. XLSX usa `openpyxl==3.1.5` em leitura, sem calcular fórmulas nem usar seus resultados armazenados. CSV continua sem essa dependência. Não lê XLS/XLSM, não seleciona outras abas e não gera PDF diretamente. Não há indicadores reais de produtividade medidos.
+
+[Contrato e decisões XLSX](docs/PROPOSTA_XLSX.md) · [Requisitos](docs/REQUISITOS.md) · [Validação](docs/VALIDACAO.md).
 
 ## Obter o projeto
 

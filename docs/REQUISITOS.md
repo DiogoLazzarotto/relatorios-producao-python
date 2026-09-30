@@ -1,34 +1,24 @@
-# Requisitos e critérios de aceite
+# Requisitos e critérios de aceite — relatórios
 
-| ID | História | Critério de aceite | Evidência |
+| ID | Requisito | Critério de aceite | Evidência |
 |---|---|---|---|
-| RF01 | Como analista, quero consolidar produção por período | Somar ração em kg/t e categorias auxiliares em batidas, sem valores negativos | Testes do relatório e exemplo HTML |
-| RF02 | Como analista, quero detectar entradas inválidas | Rejeitar categoria, data e números inválidos com linha do erro | Testes de validação |
-| RF03 | Como gestor, quero consultar o volume logístico | Consultas reproduzíveis com carga fictícia e resultados documentados | demo.py e testes SQL |
-| RF04 | Como operador, quero cadastrar pedidos | Nome, produto, data ISO e peso positivo obrigatórios | Testes do planejador |
-| RF05 | Como operador, quero atribuir pedidos a veículos | Impedir carga acima da capacidade e data divergente | Testes transacionais |
-| RF06 | Como operador, quero acompanhar a entrega | Permitir concluir pedido planejado e cancelar pedido aberto | Testes de transição |
-| RF07 | Como visitante, quero avaliar projetos | Cards com escopo, tecnologia e links para código | Página de portfólio |
+| RF01 | Consolidar produção por período | Somar pesos com Decimal e batidas inteiras, com filtro inclusivo | Testes de totais/filtro e comparação CSV/XLSX |
+| RF02 | Detectar entradas inválidas | Rejeitar cabeçalhos, datas, vazios, negativos e números inválidos com linha do erro | Testes CSV e XLSX |
+| RF08 | Importar XLSX | Mesmas validações e totais que CSV; aceitar datas Excel e preservar HTML/JSON | 21 testes XLSX/integração e exemplo fictício |
+| RF12 | Exportar relatório | HTML com escape, pesos/totais e JSON com kg decimal textual | Testes de exportação e equivalência das saídas |
 
-## Planejamento proposto
+RF08 implementado na branch do PR associado à [issue #2](https://github.com/DiogoLazzarotto/DiogoLazzarotto/issues/2).
+Os testes automatizados de aceite estão aprovados; a integração em `main` depende do merge do PR.
 
-| Etapa | Entrega | Responsável | Situação |
-|---|---|---|---|
-| 1 | Relatórios e validações | Diogo, com apoio de IA | Implementada |
-| 2 | Modelo e consultas SQL | Diogo, com apoio de IA | Implementada |
-| 3 | Planejador e interface | Diogo, com apoio de IA | Implementada |
-| 4 | Página e documentação | Diogo, com apoio de IA | Implementada |
-| 5 | Estudo, revisão pessoal e demonstração | Diogo | Pendente |
+## Regras e limites
 
-Esse quadro documenta as entregas atuais; não simula sprints passadas, entrevistas ou validação com usuários.
+Pesos são informados; não inferir kg por batida. Categorias auxiliares usam kg=0;
+Recebimentos usam batidas=0. Somar duplicatas por categoria/produto, pois não há ID de lançamento.
+CSV e XLSX usam validador comum. XLSX lê apenas a primeira aba e rejeita fórmulas/erros de célula.
+Os dados são fictícios, sem validação com usuários ou indicadores reais de produtividade.
 
-## Backlog futuro
+## Backlog
 
-- RF08: importar arquivos XLSX com testes de células vazias e formatos numéricos.
-- RF09: editar pedidos com recálculo transacional de capacidade.
-- RF10: autenticar usuários antes de disponibilizar o planejador em rede.
-- RF11: exportar programação semanal.
-
-## Riscos
-
-O planejador é uma demonstração local, sem autenticação. A atribuição é manual e não calcula distâncias nem rotas ótimas. Relatórios usam pesos informados; não inferem kg por batida. Testes automatizados verificam regras; validação com usuários permanece pendente.
+- Identificadores de lançamento para detectar duplicatas.
+- Seleção explícita de aba XLSX, se necessária.
+- Configurar CI para executar a suíte em Python 3.11 e 3.12.
