@@ -1,0 +1,38 @@
+[
+  {
+    "categoria": "Medicamentos",
+    "produto": "Terminação 1",
+    "batidas": 100,
+    "kg": "0"
+  },
+  {
+    "categoria": "Mineral",
+    "produto": "Núcleo Crescimento",
+    "batidas": 18,
+    "kg": "0"
+  },
+  {
+    "categoria": "Premix",
+    "produto": "Crescimento 1A",
+    "batidas": 100,
+    "kg": "0"
+  },
+  {
+    "categoria": "Ração",
+    "produto": "Alojamento 1",
+    "batidas": 14,
+    "kg": "35000"
+  },
+  {
+    "categoria": "Ração",
+    "produto": "Terminação 2A",
+    "batidas": 44,
+    "kg": "110000"
+  },
+  {
+    "categoria": "Recebimentos",
+    "produto": "Farelo de soja",
+    "batidas": 0,
+    "kg": "36720"
+  }
+]
