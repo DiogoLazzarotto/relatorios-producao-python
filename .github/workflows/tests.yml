@@ -1,0 +1,42 @@
+name: Testes
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Instalar dependência XLSX
+        run: python -m pip install -r requirements-xlsx.txt
+      - name: Executar testes
+        run: python -m unittest discover -s tests -v
+      - name: Conferir prévia reproduzível
+        run: |
+          python scripts/generate_preview.py
+          git diff --exit-code -- docs/assets/preview.svg
+      - name: Conferir CSV sem dependências
+        run: python -S -m unittest discover -s tests -p test_report.py -v
+      - name: Comparar saídas dos exemplos CSV e XLSX
+        run: |
+          python src/report.py examples/producao.csv --output /tmp/report-csv
+          python src/report.py examples/producao.xlsx --output /tmp/report-xlsx
+          diff -r /tmp/report-csv /tmp/report-xlsx

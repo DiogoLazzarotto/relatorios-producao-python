@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-label="Relatórios de produção">
+<rect width="1200" height="760" fill="#0d1420"/>
+<text x="44" y="58" font-family="DejaVu Sans, Arial, sans-serif" font-size="32" fill="#edf4fb" font-weight="700">Relatórios de produção</text>
+<text x="44" y="92" font-family="DejaVu Sans, Arial, sans-serif" font-size="17" fill="#a8bad0" font-weight="400">CSV / XLSX · validação comum · pesos Decimal · exportação HTML e JSON</text>
+<rect x="44" y="124" width="354" height="116" rx="14" fill="#162131" stroke="#2d3e54"/>
+<text x="64" y="157" font-family="DejaVu Sans, Arial, sans-serif" font-size="16" fill="#a8bad0" font-weight="400">Ração</text>
+<text x="64" y="207" font-family="DejaVu Sans, Arial, sans-serif" font-size="32" fill="#6cd9ed" font-weight="700">145 t</text>
+<rect x="418" y="124" width="354" height="116" rx="14" fill="#162131" stroke="#2d3e54"/>
+<text x="438" y="157" font-family="DejaVu Sans, Arial, sans-serif" font-size="16" fill="#a8bad0" font-weight="400">Batidas de ração</text>
+<text x="438" y="207" font-family="DejaVu Sans, Arial, sans-serif" font-size="32" fill="#6cd9ed" font-weight="700">58</text>
+<rect x="792" y="124" width="354" height="116" rx="14" fill="#162131" stroke="#2d3e54"/>
+<text x="812" y="157" font-family="DejaVu Sans, Arial, sans-serif" font-size="16" fill="#a8bad0" font-weight="400">Recebimentos</text>
+<text x="812" y="207" font-family="DejaVu Sans, Arial, sans-serif" font-size="32" fill="#6cd9ed" font-weight="700">36.720 kg</text>
+<text x="44" y="280" font-family="DejaVu Sans, Arial, sans-serif" font-size="22" fill="#edf4fb" font-weight="700">Produção por categoria</text>
+<text x="52" y="316" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#a8bad0" font-weight="400">Medicamentos</text>
+<text x="750" y="316" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#edf4fb" font-weight="700">100 batidas</text>
+<path d="M44 328 H1156" stroke="#2d3e54"/>
+<text x="52" y="362" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#a8bad0" font-weight="400">Premix</text>
+<text x="750" y="362" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#edf4fb" font-weight="700">100 batidas</text>
+<path d="M44 374 H1156" stroke="#2d3e54"/>
+<text x="52" y="408" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#a8bad0" font-weight="400">Mineral</text>
+<text x="750" y="408" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#edf4fb" font-weight="700">18 batidas</text>
+<path d="M44 420 H1156" stroke="#2d3e54"/>
+<text x="44" y="478" font-family="DejaVu Sans, Arial, sans-serif" font-size="22" fill="#edf4fb" font-weight="700">Peso de ração por produto</text>
+<text x="52" y="514" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#a8bad0" font-weight="400">Alojamento 1</text>
+<text x="750" y="514" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#edf4fb" font-weight="700">35.000 kg</text>
+<path d="M44 526 H1156" stroke="#2d3e54"/>
+<text x="52" y="560" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#a8bad0" font-weight="400">Terminação 2A</text>
+<text x="750" y="560" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" fill="#edf4fb" font-weight="700">110.000 kg</text>
+<path d="M44 572 H1156" stroke="#2d3e54"/>
+<text x="44" y="727" font-family="DejaVu Sans, Arial, sans-serif" font-size="15" fill="#a8bad0" font-weight="400">Dados fictícios · prévia dos resultados executados · sem métricas de produção real</text>
+</svg>

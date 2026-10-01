@@ -24,4 +24,8 @@ no ambiente de verificação. O teste sem dependência usa `-S` para excluir pac
 ## Limitações da verificação
 
 Executado em Python 3.12; Python 3.11 não foi executado neste ambiente. Não houve inspeção visual
-em navegador, validação com usuários ou medição operacional. Não há CI configurada neste repositório.
+em navegador, validação com usuários ou medição operacional. CI configurada para Python 3.11 e 3.12. O resultado remoto pode ser consultado no badge do README.
+
+## Prévias e integração contínua
+
+Prévia SVG gerada a partir dos resultados fictícios executados, com gerador em `scripts/generate_preview.py`. O workflow `tests.yml` executa a suíte e verifica que a prévia é reproduzível. Capturas de interface em navegador não foram realizadas nesta etapa.

@@ -1,6 +1,14 @@
 # Relatórios de produção em Python
 
-Consolida arquivos CSV ou XLSX com validações, filtros de período e totais por produto. Projeto demonstrativo com dados fictícios e apoio de IA.
+[![Testes](https://github.com/DiogoLazzarotto/relatorios-producao-python/actions/workflows/tests.yml/badge.svg)](https://github.com/DiogoLazzarotto/relatorios-producao-python/actions/workflows/tests.yml)
+
+Consolida arquivos CSV ou XLSX com validações, filtros de período e totais por produto. Projeto demonstrativo com dados fictícios.
+
+## Prévia dos resultados
+
+![Prévia dos resultados do exemplo fictício](docs/assets/preview.svg)
+
+Imagem gerada a partir da execução dos dados fictícios; representa os resultados e regras, sem ser uma captura da interface. Reproduza com `python scripts/generate_preview.py`.
 
 ## Instalação e execução
 
@@ -56,3 +64,7 @@ cd relatorios-producao-python
 ```
 
 [Voltar ao perfil](https://github.com/DiogoLazzarotto)
+
+## Verificação automática
+
+O GitHub Actions executa os testes em Python 3.11 e 3.12 em pushes para `main` e pull requests. Também regenera e compara a prévia com o arquivo versionado.
