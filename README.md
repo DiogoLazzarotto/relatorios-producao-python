@@ -68,3 +68,20 @@ cd relatorios-producao-python
 ## Verificação automática
 
 O GitHub Actions executa os testes em Python 3.11 e 3.12 em pushes para `main` e pull requests. Também regenera e compara a prévia com o arquivo versionado.
+
+## Solução de problemas
+
+| Situação | Como corrigir |
+|---|---|
+| Cabeçalho inválido | Use exatamente `data;categoria;produto;batidas;kg` no CSV. No XLSX, coloque esses cinco nomes na primeira linha, em colunas separadas e na mesma ordem. |
+| Data inválida | No CSV, use `2026-10-02`, por exemplo. No XLSX, use texto nesse formato ou uma célula de data sem horário. |
+| Célula obrigatória vazia | Preencha todos os campos. Informe `0` em kg ou batidas quando a categoria não usar aquele valor. |
+| Número inválido | Remova separadores de milhares, valores negativos e fórmulas. Para um peso de 2.500 kg, informe `2500`. |
+| Dados da aba errada | Coloque os lançamentos na primeira aba do XLSX; selecionar outra aba como ativa não altera a leitura. |
+| Falta de dependência para XLSX | Execute `python -m pip install -r requirements-xlsx.txt` no mesmo ambiente usado para executar o relatório. |
+
+O peso da ração precisa ser preenchido explicitamente: uma batida de 2.500 kg deve ter `batidas=1` e `kg=2500`. O programa não calcula o peso a partir da quantidade de batidas.
+
+Se a execução falhar, confira a linha indicada na mensagem e execute novamente após corrigir o arquivo. Um relatório antigo pode continuar na pasta de saída; confira o sucesso da nova execução antes de usar os resultados.
+
+Para comparar CSV e XLSX, use os mesmos lançamentos e filtros de período, gere cada formato em uma pasta separada e compare os arquivos `totais.json`.
